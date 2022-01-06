@@ -11,19 +11,22 @@ import { useWallet } from "use-wallet";
 import { useOwnedKudos } from "../hooks/use-owned-kudos";
 import GreyButton from "../components/GreyButton";
 
+const supportedConnectors = [
+  { id: "injected", name: "MetaMask" },
+  { id: "walletconnect", name: "WalletConnect" },
+] as const;
+
 const ConnectWalletLayout: FC = () => {
   const wallet = useWallet();
   return (
     <main className="flex h-full">
       <div className="m-auto flex flex-col items-center gap-2">
-        <GreyButton onClick={() => wallet.connect("injected")}>
-          <UserIcon className="h-5 w-5" />
-          Connect via Browser extension
-        </GreyButton>
-        <GreyButton onClick={() => wallet.connect("walletconnect")}>
-          <UserIcon className="h-5 w-5" />
-          Connect via WalletConnect
-        </GreyButton>
+        {supportedConnectors.map(({ id, name }) => (
+          <GreyButton key={id} onClick={() => wallet.connect(id)}>
+            <UserIcon className="h-5 w-5" />
+            Connect via {name}
+          </GreyButton>
+        ))}
       </div>
     </main>
   );
